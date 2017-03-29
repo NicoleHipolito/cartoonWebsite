@@ -9,7 +9,8 @@
     </head>
     <body>
         <?php
-
+            include "header.php";
+            
             // ******************* ESTABLISH CONNE*********************************
             function getConnected() {
                 $servername = getenv('IP');
