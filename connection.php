@@ -21,26 +21,34 @@
             }
                 
             // ******************* SQL DISPLAY TABLE FUNCTION **********************
-            function printTable($dbConn, $sql) {
-                $stmt = $dbConn->prepare($sql);
-                $stmt->execute();
-                
-                echo '<table>';
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC))  {
+            function printTable($dbConn, $sql, $labels) {
+                    
+                    $stmt = $dbConn->prepare($sql);
+                    $stmt->execute();
+                    
+                    echo '<table>';
+                    
                     echo '<tr>';
-                    foreach($row as $col) {
-                        echo '<th>'.$col.'</th>';    
+                    for ($i = 0; $i < count($labels); $i++)
+                        echo '<th><b>'.$labels[$i].'</th>';
+                    echo '</tr>'; 
+                    
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC))  {
+                        echo '<tr>';
+                        foreach($row as $col) {
+                            echo '<th>'.$col.'</th>';    
+                        }
+                        echo '</tr>';
                     }
-                    echo '</tr>';
-                }
-                echo '</table>';
+                    echo '</table>';
+                    echo '<br>';
             }
         ?>
         
         <div>
-            <form action="poop.php" method="POST">
+            <form action="connection.php" method="POST">
                 
-            <label>Filter By</label><br>
+            <label>Filter By: </label>
             <input type="radio" name="filter" value="title" required />
             <label>Show Title</label>
             
@@ -67,20 +75,22 @@
             if ($_POST["filter"] == "title") {
                 $sql = "SELECT *
                         FROM `Show`";
-                $labels = array('Show Title'); // TODO, fill in rest
+                $labels = array('Show Title', 'Number of Seasons',
+                                'Number of Episodes', 'Creator');
                  
             } else if ($_POST["filter"] == "date") {
                 $sql = "SELECT *
                         FROM Episode";
-                $labels = array('Episode Id'); // TODO, fill in rest
+                $labels = array('Episode Id', 'Episode Name', 'Episode Length',
+                                'Air Date', 'Show Title', 'Season');
         
             } else if ($_POST["filter"] == "creator") {
                 $sql = "SELECT *
                         FROM `Character`";
-                $labels = array('Character Name'); // TODO, fill in rest
+                $labels = array('Character Name', 'Age', 'Number of Episodes', 'Show Title');
             }
             
-            printTable($dbConn, $sql);
+            printTable($dbConn, $sql, $labels);
         
         ?>
         
