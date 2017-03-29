@@ -3,6 +3,9 @@
 <html>
     <head>
         <title>Cartoons</title>
+        
+        <!--Style (External) Sheet Reference-->
+        <link rel = "stylesheet" type = "text/css" href = "style.css" />
     </head>
     <body>
         <?php
@@ -68,21 +71,23 @@
             $dbConn = getConnected();
             
             $sql = "SELECT *
-                    FROM `Character`";
+                    FROM `Show`";
                     
-            $labels = array('Testing123..');
+            $labels = array('Show Title', 'Number of Seasons',
+                            'Number of Episodes', 'Creator', 'Price');
+                    
                         
             if ($_POST["filter"] == "title") {
                 $sql = "SELECT *
                         FROM `Show`";
                 $labels = array('Show Title', 'Number of Seasons',
-                                'Number of Episodes', 'Creator');
+                                'Number of Episodes', 'Creator', 'Price');
                  
             } else if ($_POST["filter"] == "date") {
                 $sql = "SELECT *
                         FROM Episode";
                 $labels = array('Episode Id', 'Episode Name', 'Episode Length',
-                                'Air Date', 'Show Title', 'Season');
+                                'Air Date', 'Show Title', 'Season', 'Price');
         
             } else if ($_POST["filter"] == "creator") {
                 $sql = "SELECT *
