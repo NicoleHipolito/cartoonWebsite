@@ -97,23 +97,23 @@
                 
             
                 if ($_POST["filter"] == "show") {
-                    $sql = "SELECT Episode.showTitle, Episode.episodeName, Episode.airDate, Episode.price
+                    $sql = "SELECT Episode.showTitle, Episode.episodeName, Episode.price
                             FROM Episode
                             ORDER BY Episode.showTitle ".$sort;
-                    $labels = array('Show Title', 'Episode Name', 'Air Date','Price');
+                    $labels = array('Show Title', 'Episode Name', 'Price');
             
                 } else if ($_POST["filter"] == "price") {
-                    $sql = "SELECT Episode.price, Episode.episodeName, Episode.airDate, Episode.showTitle
+                    $sql = "SELECT Episode.price, Episode.episodeName, Episode.showTitle
                             FROM Episode
                             ORDER BY Episode.price ".$sort;
-                    $labels = array('Price', 'Episode Name', 'Air Date', 'Show Title');
+                    $labels = array('Price', 'Episode Name', 'Show Title');
                 } else {
                     // Default Values
-                    $sql = "SELECT Episode.episodeName, Episode.airDate, Episode.showTitle, Episode.price
+                    $sql = "SELECT Episode.episodeName, Episode.showTitle, Episode.price
                             FROM Episode
                             ORDER BY Episode.episodeName ".$sort;
                             
-                    $labels = array('Episode Name', 'Air Date', 'Show Title', 'Price');
+                    $labels = array('Episode Name', 'Show Title', 'Price');
                     
                 }
                 
@@ -127,7 +127,7 @@
             <form action="connection.php" method="POST">
             <!--Displaying Either Episodes or Shows-->
             <label>Display </label>
-            <input type="radio" name="display" value="show" />
+            <input type="radio" name="display" value="show" required/>
             <label>Show</label>
             
             <input type="radio" name="display" value="episode" />
@@ -187,7 +187,7 @@
             </div>
             
         <?php
-            } // end else if
+            } 
         ?>
         <div>
             <input type="submit" value="Submit" />
