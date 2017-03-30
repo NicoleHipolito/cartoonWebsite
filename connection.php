@@ -17,6 +17,21 @@
         
         <!--Style (External) Sheet Reference-->
         <link rel = "stylesheet" type = "text/css" href = "style.css" />
+        <script type="text/javascript" src="jquery-3.2.0.js"></script>
+        <script type="text/javascript">
+            var isShown = false;
+            $(document).ready(function(){
+                 $('.togglebutton').click(function() {
+                 $("#"+ $(this).data('id')).toggle();
+                //  if(!isShown){
+                //      $('.togglebutton').text("show less");
+                //  }
+                //  else{
+                //      $('.togglebutton').text("show more");
+                //  }
+                });
+            });
+        </script>
     </head>
     <body>
         <?php
@@ -39,6 +54,7 @@
             // ******************* SQL DISPLAY TABLE FUNCTION **********************
             function printTable($dbConn, $sql) {
                     $count = 0;
+                    $index = 0;
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute();
                     
@@ -55,11 +71,28 @@
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC))  {
                         $count += 1;
                         echo '<tr>';
-                        echo '<td>'.$row["episodeName"].'</td>';
+                        // echo '<td>';
+                        // $row["episodeName"]
+                        echo '<td>';
+                            echo "<span class='togglebutton' id='fakeLink' data-id=" . $index . ">" . $row['episodeName'] . "</span>";
+                            echo "<div id=" . $index ." style='display:none'>";
+                                echo "Creator: " . $row["creator"] . "<br>"
+                                    ."Length: " . $row["length"] . " mins<br>"
+                                    ."Air Date: " . $row["airDate"] . "<br>"
+                                    ."Season: " . $row["seasonNum"] . "<br>";
+        
+                                    // ."Character Name: " . $row["characterName"] . "<br>"
+                                    // ."Character Age: " . $row["age"] . "<br>";
+                                    // var_dump($row);
+                                    ++$index;
+                            echo "</div>";
+                        echo '</td>';
+                        // echo '</td>';
                         echo '<td>'.$row["showTitle"].'</td>';
                         echo '<td>'.$row["price"].'</td>';
                         echo '<td><input type="checkbox" name="add['.$count.']" value="'.$row["episodeName"].'"></td>';
                         echo '</tr>';
+                        
                     } 
                     echo '</table>';
                     echo '<input type="submit" value="Place Order">';
@@ -75,29 +108,32 @@
                     $sort = "DESC";
                 else 
                      $sort = "ASC";
-                
             
                 if ($_POST["filter"] == "show") {
-                    $sql = "SELECT Episode.showTitle, Episode.episodeName, Episode.price
-                            FROM Episode
-                            ORDER BY Episode.showTitle ".$sort;
+                    $sql = 'SELECT e.*, s.creator
+                            FROM Episode as e
+                            JOIN `Show` as s
+                            ON e.showTitle = s.showTitle 
+                            ORDER BY e.showTitle '.$sort;
                     $labels = array('Show Title', 'Episode Name', 'Price');
             
                 } else if ($_POST["filter"] == "price") {
-                    $sql = "SELECT Episode.price, Episode.episodeName, Episode.showTitle
-                            FROM Episode
-                            ORDER BY Episode.price ".$sort;
+                    $sql = 'SELECT e.*, s.creator
+                            FROM Episode as e
+                            JOIN `Show` as s
+                            ON e.showTitle = s.showTitle 
+                            ORDER BY e.price '.$sort;
                     $labels = array('Price', 'Episode Name', 'Show Title');
                 } else {
                     // Default Values
-                    $sql = "SELECT Episode.episodeName, Episode.showTitle, Episode.price
-                            FROM Episode
-                            ORDER BY Episode.episodeName ".$sort;
-                            
+                    $sql = 'SELECT e.*, s.creator
+                            FROM Episode as e
+                            JOIN `Show` as s
+                            ON e.showTitle = s.showTitle 
+                            ORDER BY e.episodeName '.$sort;
                     $labels = array('Episode Name', 'Show Title', 'Price');
-                    
-                }
                 
+                }
                 printTable($dbConn, $sql);
                 
             }

@@ -37,3 +37,8 @@ p, label {
 .rem_float {
     clear:both;
 }
+#fakeLink{
+    color: #f88379;
+    text-decoration: underline;
+    cursor: pointer;
+}
