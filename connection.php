@@ -21,14 +21,8 @@
         <script type="text/javascript">
             var isShown = false;
             $(document).ready(function(){
-                 $('.togglebutton').click(function() {
-                 $("#"+ $(this).data('id')).toggle();
-                //  if(!isShown){
-                //      $('.togglebutton').text("show less");
-                //  }
-                //  else{
-                //      $('.togglebutton').text("show more");
-                //  }
+                $('.togglebutton').click(function() {
+                    $("#"+ $(this).data('id')).toggle();
                 });
             });
         </script>
@@ -76,14 +70,21 @@
                         echo '<td>';
                             echo "<span class='togglebutton' id='fakeLink' data-id=" . $index . ">" . $row['episodeName'] . "</span>";
                             echo "<div id=" . $index ." style='display:none'>";
-                                echo "Creator: " . $row["creator"] . "<br>"
+                                echo "<br>Creator: " . $row["creator"] . "<br>"
                                     ."Length: " . $row["length"] . " mins<br>"
                                     ."Air Date: " . $row["airDate"] . "<br>"
                                     ."Season: " . $row["seasonNum"] . "<br>";
-        
-                                    // ."Character Name: " . $row["characterName"] . "<br>"
-                                    // ."Character Age: " . $row["age"] . "<br>";
-                                    // var_dump($row);
+                                    $characters = getChar($row["showTitle"]);
+                                    echo "<br><u>Character List:</u>\n";
+                                    echo "<ul>";
+                                    foreach ($characters as $character) {
+                                        echo "<li>".$character["characterName"];
+                                        if($character["age"]!="N/A")
+                                            echo "(".$character["age"]." yrs old)</li>";
+                                        else
+                                            echo "(".$character["age"].")</li>";
+                                    }
+                                    echo "</ul>";
                                     ++$index;
                             echo "</div>";
                         echo '</td>';
@@ -135,6 +136,23 @@
                 
                 }
                 printTable($dbConn, $sql);
+                
+                
+                
+            }
+            function getChar($show) {
+                $dbConn = getConnected();
+                $sql = "SELECT c.characterName, c.age
+                        FROM `Character` as c
+                        WHERE c.showTitle = '$show'";
+                $stmt = $dbConn->prepare($sql);
+                $stmt->execute();
+                $charArray = array();
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                    array_push($charArray, $row);
+                
+                }
+                return $charArray;
                 
             }
         ?>
