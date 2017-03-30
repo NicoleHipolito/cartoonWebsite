@@ -3,6 +3,9 @@
     if (empty($_SESSION["shoppingCart"])){
         $_SESSION["shoppingCart"] = array();
     }
+    if(empty($_SESSION["totalPrice"])){
+        $_SESSION["totalPrice"] = 0;
+    }
     
     // if addEpisode == true
     // add it array_push($_SESSION["shoppingCart"], $_POST["episodeId"])
