@@ -48,44 +48,6 @@
                     echo '</table>';
                     echo '<br>';
             }
-            // ******************* Display Filtered Tables (Shows) **********************
-            function displayShowInfo($sort) {
-                $dbConn = getConnected();
-                
-                // Default Values
-                $sql = "SELECT *
-                        FROM `Show`";
-                        
-                $labels = array('Show Title', 'Number of Seasons',
-                                'Number of Episodes', 'Creator', 'Price');
-               
-                if ($sort == "desc")
-                    $sort = "DESC";
-                else 
-                     $sort = "ASC";
-                
-               if ($_POST["filter"] == "price") {
-                    $sql = "SELECT `Show`.price,`Show`.showTitle, `Show`.creator
-                            FROM `Show`
-                            ORDER BY `Show`.price ".$sort;
-                    $labels = array('Price', 'Show Title', 'Creator');
-            
-                } else if ($_POST["filter"] == "creator") {
-                    $sql = "SELECT `Show`.creator, `Show`.showTitle, `Show`.price
-                            FROM `Show`
-                            ORDER BY `Show`.creator ".$sort;
-                    $labels = array('Creator', 'Show Title', 'Price');
-                } else {
-                    $sql = "SELECT *
-                            FROM `Show`
-                            ORDER BY `Show`.showTitle ".$sort;
-                    $labels = array('Show Title', 'Number of Seasons',
-                                    'Number of Episodes', 'Creator', 'Price');
-                }
-                
-                printTable($dbConn, $sql, $labels);
-                
-            }
             // ******************* Display Filtered Tables (Episodes) **********************
             function displayEpisodeInfo($sort) {
                 $dbConn = getConnected();
@@ -120,91 +82,41 @@
                 printTable($dbConn, $sql, $labels);
                 
             }
-            
         ?>
-        
+
         <div>
-            <form action="connection.php" method="POST">
-            <!--Displaying Either Episodes or Shows-->
-            <label>Display </label>
-            <input type="radio" name="display" value="show" required/>
+             <form action="connection.php" method="POST">
+            <!--Filter-->
+            <label>Filter Episode By: </label>
+            <input type="radio" name="filter" value="name"/>
+            <label>Episode Name</label>
+            
+            <input type="radio" name="filter" value="show" />
             <label>Show</label>
             
-            <input type="radio" name="display" value="episode" />
-            <label>Episode</label>
-        </div>
-        
-        <?php
-            if ($_POST["display"] == "episode") {
-        ?>
-            <div>
-                <!--Filter-->
-                <label>Filter Episode By: </label>
-                <input type="radio" name="filter" value="name"/>
-                <label>Episode Name</label>
-                
-                <input type="radio" name="filter" value="show" />
-                <label>Show</label>
-                
-                <input type="radio"  name="filter" value="price" />
-                <label>Price</label>
-                <?php
-                    echo $tab;
-                ?>
-                <!--Sorting-->
-                <label>Sort By: </label>
-                <input type="radio" name="sort" value="asc"/>
-                <label>Ascending</label>
-                
-                <input type="radio" name="sort" value="desc" />
-                <label>Descending</label>
-            </div>
-        
-        <?php
-            } else if ($_POST["display"] == "show") {
-        ?>
-            <div>
-                <!--Filter-->
-                <label>Filter Show By: </label>
-                <input type="radio" name="filter" value="title"/>
-                <label>Show Title</label>
-                
-                <input type="radio" name="filter" value="price" />
-                <label>Price</label>
-                
-                <input type="radio"  name="filter" value="creator" />
-                <label>Creator</label>
-                <?php
-                    echo $tab;
-                ?>
-                <!--Sorting-->
-                <label>Sort By: </label>
-                <input type="radio" name="sort" value="asc"/>
-                <label>Ascending</label>
-                
-                <input type="radio" name="sort" value="desc" />
-                <label>Descending</label>
-            </div>
+            <input type="radio"  name="filter" value="price" />
+            <label>Price</label>
             
-        <?php
-            } 
-        ?>
-        <div>
+            <?php
+                echo $tab;
+            ?>
+            
+            <!--Sorting-->
+            <label>Sort By: </label>
+            <input type="radio" name="sort" value="asc"/>
+            <label>Ascending</label>
+            
+            <input type="radio" name="sort" value="desc" />
+            <label>Descending</label> <br>
+            
             <input type="submit" value="Submit" />
         </div>
         
         <?php
-            
             $sort = $_POST["sort"];
-            
-            if ($_POST["display"] == "episode") {
-                displayEpisodeInfo($sort);   
-            } else {
-                displayShowInfo($sort);
-            }
+
+            displayEpisodeInfo($sort);   
         ?>
-        
-        
         
     </body>
 </html>
