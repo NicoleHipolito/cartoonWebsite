@@ -28,6 +28,10 @@
             // echo '<br>';
             // var_dump($_SESSION["shoppingCart"]);
             
+            $_SESSION["shoppingCart"] = array_unique($_SESSION["shoppingCart"]);
+            echo "<table>";
+            echo "<tr style='background:#000099;color:white;'><th><b>Episode Name</b></th><th><b>Price</b></th></tr>";
+            
             foreach ($_SESSION["shoppingCart"] as $data) {
                 $sql = "SELECT `Episode`.price
                         FROM `Episode`
@@ -37,12 +41,14 @@
                 $stmt = $dbConn->prepare($sql);
                 $stmt->execute();
                 
-                $price = $stmt->fetch(PDO::FETCH_ASSOC);
+                $tableData = $stmt->fetch(PDO::FETCH_ASSOC);
                 
-                echo "Episode Name: ". $data;
-                echo " - Price: $".$price["price"];
-                echo "<br>";
+                echo "<tr style='background:lightblue;'><td>$data</td>";
+                echo "<td>".$tableData["price"]."</td></tr>";
+                $_SESSION["totalPrice"] += $tableData["price"];
             }
+            echo "<tr style='background:#E6F3F7;'><td><b>Total Price</b></td><td><b>".$_SESSION["totalPrice"]."</b></td></tr>";
+            echo "</table";
             
             
         ?>
