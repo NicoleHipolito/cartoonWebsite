@@ -1,4 +1,12 @@
-
+<?php
+    session_start();
+    if (empty($_SESSION["shoppingCart"])){
+        $_SESSION["shoppingCart"] = array();
+    }
+    
+    // if addEpisode == true
+    // add it array_push($_SESSION["shoppingCart"], $_POST["episodeId"])
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,27 +34,35 @@
             }
                 
             // ******************* SQL DISPLAY TABLE FUNCTION **********************
-            function printTable($dbConn, $sql, $labels) {
-                    
+            function printTable($dbConn, $sql) {
+                    $count = 0;
                     $stmt = $dbConn->prepare($sql);
                     $stmt->execute();
                     
+                    echo "<form method='POST' action='reviewOrder.php'>";
                     echo '<table>';
                     
                     echo '<tr>';
-                    for ($i = 0; $i < count($labels); $i++)
-                        echo '<th><b>'.$labels[$i].'</th>';
+                    echo '<th><b>Episode Name</th>';
+                    echo '<th><b>Show Title</th>';
+                    echo '<th><b>Price</th>';
+                    echo '<th><b>Add to Cart</th>';
                     echo '</tr>'; 
                     
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC))  {
+                        $count += 1;
                         echo '<tr>';
-                        foreach($row as $col) {
-                            echo '<th>'.$col.'</th>';    
-                        }
+                        echo '<td>'.$row["episodeName"].'</td>';
+                        echo '<td>'.$row["showTitle"].'</td>';
+                        echo '<td>'.$row["price"].'</td>';
+                        echo '<td><input type="checkbox" name="add['.$count.']" value="'.$row["episodeName"].'"></td>';
                         echo '</tr>';
-                    }
+                    } 
                     echo '</table>';
+                    echo '<input type="submit" value="Place Order">';
+                    echo '</form>';
                     echo '<br>';
+                    
             }
             // ******************* Display Filtered Tables (Episodes) **********************
             function displayEpisodeInfo($sort) {
@@ -79,7 +95,7 @@
                     
                 }
                 
-                printTable($dbConn, $sql, $labels);
+                printTable($dbConn, $sql);
                 
             }
         ?>
@@ -110,13 +126,17 @@
             <label>Descending</label> <br>
             
             <input type="submit" value="Submit" />
+            </form>
         </div>
         
         <?php
             $sort = $_POST["sort"];
 
-            displayEpisodeInfo($sort);   
+            displayEpisodeInfo($sort); 
         ?>
+        <!--<form method="POST" action="reviewOrder.php">-->
+        <!--<input type="submit" value="Place Order">-->
+        <!--</form>-->
         
     </body>
 </html>
