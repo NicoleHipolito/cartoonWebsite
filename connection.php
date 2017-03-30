@@ -10,6 +10,7 @@
     <body>
         <?php
             include "header.php";
+            $tab = '&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;';
             
             // ******************* ESTABLISH CONNE*********************************
             function getConnected() {
@@ -47,20 +48,73 @@
                     echo '</table>';
                     echo '<br>';
             }
+            // ******************* Display Filtered Tables **********************
+            function displayShowInfo() {
+                $dbConn = getConnected();
+                
+                // Default Values
+                $sql = "SELECT *
+                        FROM `Show`";
+                        
+                $labels = array('Show Title', 'Number of Seasons',
+                                'Number of Episodes', 'Creator', 'Price');
+               
+                if ($_POST["sort"] == "desc")
+                    $sort = "DESC";
+                else 
+                     $sort = "ASC";
+                
+                if ($_POST["filter"] == "title") {
+                    $sql = "SELECT *
+                            FROM `Show`
+                            ORDER BY `Show`.showTitle ".$sort;
+                    $labels = array('Show Title', 'Number of Seasons',
+                                    'Number of Episodes', 'Creator', 'Price');
+                     
+                } else if ($_POST["filter"] == "price") {
+                    $sql = "SELECT `Show`.price,`Show`.showTitle, `Show`.creator
+                            FROM `Show`
+                            ORDER BY `Show`.price ".$sort;
+                    $labels = array('Price', 'Show Title', 'Creator');
+            
+                } else if ($_POST["filter"] == "creator") {
+                    $sql = "SELECT `Show`.creator, `Show`.showTitle, `Show`.price
+                            FROM `Show`
+                            ORDER BY `Show`.creator ".$sort;
+                    $labels = array('Creator', 'Show Title', 'Price');
+                }
+                
+                printTable($dbConn, $sql, $labels);
+                
+            }
+            
         ?>
         
         <div>
             <form action="connection.php" method="POST">
                 
-            <label>Filter By: </label>
+            <!--Filter-->
+            <label>Filter Show By: </label>
             <input type="radio" name="filter" value="title" required />
             <label>Show Title</label>
             
-            <input type="radio" name="filter" value="date" />
-            <label>Air Date</label>
+            <input type="radio" name="filter" value="price" />
+            <label>Price</label>
             
             <input type="radio"  name="filter" value="creator" />
-            <label>Creator</label> <br>
+            <label>Creator</label>
+            
+            <?php
+                echo $tab;
+            ?>
+            <!--Sorting-->
+            <label>Sort By: </label>
+            <input type="radio" name="sort" value="asc"/>
+            <label>Ascending</label>
+            
+            <input type="radio" name="sort" value="desc" />
+            <label>Descending</label>
+            
             
             <div>
                 <input type="submit" value="Submit" />
@@ -69,35 +123,7 @@
         </div>
         
         <?php
-            $dbConn = getConnected();
-            
-            $sql = "SELECT *
-                    FROM `Show`";
-                    
-            $labels = array('Show Title', 'Number of Seasons',
-                            'Number of Episodes', 'Creator', 'Price');
-                    
-                        
-            if ($_POST["filter"] == "title") {
-                $sql = "SELECT *
-                        FROM `Show`";
-                $labels = array('Show Title', 'Number of Seasons',
-                                'Number of Episodes', 'Creator', 'Price');
-                 
-            } else if ($_POST["filter"] == "date") {
-                $sql = "SELECT *
-                        FROM Episode";
-                $labels = array('Episode Id', 'Episode Name', 'Episode Length',
-                                'Air Date', 'Show Title', 'Season', 'Price');
-        
-            } else if ($_POST["filter"] == "creator") {
-                $sql = "SELECT *
-                        FROM `Character`";
-                $labels = array('Character Name', 'Age', 'Number of Episodes', 'Show Title');
-            }
-            
-            printTable($dbConn, $sql, $labels);
-        
+            displayShowInfo();
         ?>
         
         
