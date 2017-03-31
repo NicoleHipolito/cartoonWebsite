@@ -1,6 +1,8 @@
     
 html, body {
     max-height: 100%;
+    background: #E1F2F6;
+    font-family: 'Open Sans Condensed', sans-serif;
 }
 table {
     font-family: arial, sans-serif;
@@ -20,7 +22,8 @@ img {
 }
 h1 {
     font-size: 3em;
-    font-family: 'Baloo', cursive;
+    font-family: 'Raleway', sans-serif;
+    color: #FF6A90;
 }
 p, label {
     font-size: 1em;
@@ -41,4 +44,17 @@ p, label {
     color: #f88379;
     text-decoration: underline;
     cursor: pointer;
+}
+.headerBox{
+    background: #982F74;
+    padding:5px;
+    width: 90%;
+    box-shadow: 4px 4px 4px grey;
+}
+.wrapper{
+    min-height:100%;
+	position:relative;
+}
+tr{
+    background-color: lightblue;
 }

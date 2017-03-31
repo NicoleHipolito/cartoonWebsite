@@ -5,6 +5,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway" rel="stylesheet">
+        <link rel = "stylesheet" type = "text/css" href = "style.css" />
     </head>
     <body>
         <center>
@@ -28,7 +30,7 @@
                 $_SESSION["shoppingCart"] = array_unique($_SESSION["shoppingCart"]);
                 $prices = array();
                 echo "<table>";
-                echo "<tr style='background:#000099;color:white;'><th><b>Episode Name</b></th><th><b>Price</b></th></tr>";
+                echo "<tr style='background:#982F74;color:white;'><th><b>Episode Name</b></th><th><b>Price</b></th></tr>";
                 
                 foreach ($_SESSION["shoppingCart"] as $data) {
                     $sql = "SELECT `Episode`.price

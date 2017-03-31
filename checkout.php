@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Raleway" rel="stylesheet">
+        <link rel = "stylesheet" type = "text/css" href = "style.css" />
     </head>
     <body>
         <center>
